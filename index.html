@@ -184,7 +184,7 @@
           <a href="#faq" class="text-sm font-medium text-slate-600 hover:text-cobalt transition-colors py-2">FAQ</a>
         </nav>
 
-        <!-- Derecha: Botón instalar PWA (cuando esté disponible) + Botón rápido WhatsApp + Hamburguesa -->
+        <!-- Derecha: Botón instalar PWA (cuando esté disponible) + Hamburguesa -->
         <div class="flex items-center gap-1.5 sm:gap-2.5 shrink-0">
           <button id="pwa-header-install-btn" type="button"
             aria-label="Instalar aplicación Nómada"
@@ -194,16 +194,6 @@
             </svg>
             <span class="hidden sm:inline">Instalar App</span>
           </button>
-
-          <a href="https://wa.me/51929970235?text=Hola%20N%C3%B3mada%2C%20quiero%20informaci%C3%B3n%20para%20reservar%20un%20tour%20en%20Arequipa."
-            target="_blank" rel="noopener noreferrer" aria-label="Reservar por WhatsApp"
-            class="inline-flex items-center justify-center gap-1.5 min-h-[44px] min-w-[44px] px-3 sm:px-4 rounded-lg bg-summit hover:bg-summit-hover text-white text-xs sm:text-sm font-semibold transition-colors">
-            <svg class="w-4 h-4 fill-current shrink-0" viewBox="0 0 24 24" aria-hidden="true">
-              <path
-                d="M12.031 2C6.502 2 2 6.486 2 12c0 1.763.462 3.485 1.339 5.002L2 22l5.146-1.349A9.96 9.96 0 0012.031 22C17.56 22 22.062 17.514 22.062 12S17.56 2 12.031 2zm5.828 14.132c-.245.689-1.429 1.318-1.972 1.399-.506.075-1.158.107-1.871-.119-.432-.137-.986-.321-1.694-.627-2.977-1.287-4.92-4.294-5.069-4.492-.149-.198-1.21-1.61-1.21-3.071 0-1.461.765-2.18 1.036-2.478.272-.297.593-.372.791-.372.198 0 .396.002.569.01.182.009.427-.069.668.51.247.594.841 2.055.915 2.204.074.149.124.322.025.52-.099.198-.149.322-.297.495-.148.173-.312.387-.445.52-.149.148-.304.31-.131.608.173.297.77 1.271 1.653 2.058 1.137 1.013 2.095 1.327 2.392 1.476.297.148.47.124.643-.074.173-.198.742-.866.94-1.163.198-.297.396-.248.668-.149.272.099 1.732.817 2.029.965.297.149.495.223.569.347.074.124.074.718-.171 1.407z" />
-            </svg>
-            <span class="hidden min-[360px]:inline">Reservar</span>
-          </a>
 
           <button id="mobile-menu-btn" type="button"
             class="md:hidden w-11 h-11 inline-flex items-center justify-center rounded-lg border border-slate-200 bg-white text-night hover:bg-slate-50 shrink-0"
@@ -494,7 +484,7 @@
     <section id="programacion" class="py-12 md:py-20 bg-[#F8FAFC] border-b border-slate-200">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
-        <!-- Cabecera + Selector de Vistas (Agenda / Semanal / Mensual) -->
+        <!-- Cabecera + Selector de Vistas (Agenda / Mensual) -->
         <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-5 mb-6">
           <div>
             <span class="text-xs font-bold uppercase tracking-widest text-cobalt">Programación Mensual</span>
@@ -502,36 +492,25 @@
               Próximas salidas grupales
             </h2>
             <p class="text-slate-600 mt-2 text-sm sm:text-base">
-              Consulta las fechas confirmadas de Noviembre y Diciembre 2026. Cambia entre vista Agenda, Semanal o
-              Mensual.
+              Consulta las fechas confirmadas de Noviembre y Diciembre 2026. Cambia entre vista Agenda o Mensual.
             </p>
           </div>
 
           <div class="w-full lg:w-auto">
-            <div class="grid grid-cols-3 p-1 rounded-xl bg-white border border-slate-200 gap-1" role="tablist"
+            <div class="grid grid-cols-2 p-1 rounded-xl bg-white border border-slate-200 gap-1" role="tablist"
               aria-label="Cambiar vista del calendario">
               <button type="button" id="tab-agenda" data-view="agenda" role="tab" aria-selected="true"
                 aria-controls="view-agenda"
-                class="cal-view-btn min-h-[44px] flex items-center justify-center gap-1.5 py-2 px-2 sm:px-4 rounded-lg text-xs sm:text-sm font-semibold transition-colors">
+                class="cal-view-btn min-h-[44px] flex items-center justify-center gap-1.5 py-2 px-3 sm:px-5 rounded-lg text-xs sm:text-sm font-semibold transition-colors">
                 <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"
                   aria-hidden="true">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h10" />
                 </svg>
                 <span>Agenda</span>
               </button>
-              <button type="button" id="tab-semanal" data-view="semanal" role="tab" aria-selected="false"
-                aria-controls="view-semanal"
-                class="cal-view-btn min-h-[44px] flex items-center justify-center gap-1.5 py-2 px-2 sm:px-4 rounded-lg text-xs sm:text-sm font-semibold transition-colors">
-                <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"
-                  aria-hidden="true">
-                  <path stroke-linecap="round" stroke-linejoin="round"
-                    d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                </svg>
-                <span>Semanal</span>
-              </button>
               <button type="button" id="tab-mensual" data-view="mensual" role="tab" aria-selected="false"
                 aria-controls="view-mensual"
-                class="cal-view-btn min-h-[44px] flex items-center justify-center gap-1.5 py-2 px-2 sm:px-4 rounded-lg text-xs sm:text-sm font-semibold transition-colors">
+                class="cal-view-btn min-h-[44px] flex items-center justify-center gap-1.5 py-2 px-3 sm:px-5 rounded-lg text-xs sm:text-sm font-semibold transition-colors">
                 <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"
                   aria-hidden="true">
                   <path stroke-linecap="round" stroke-linejoin="round"
@@ -579,49 +558,7 @@
           <div id="agenda-list" class="space-y-6"></div>
         </div>
 
-        <!-- ========== B) VISTA SEMANAL ========== -->
-        <div id="view-semanal" role="tabpanel" aria-labelledby="tab-semanal" class="cal-panel hidden space-y-4">
-          <div class="flex items-center justify-between gap-2 bg-white p-2.5 sm:p-4 rounded-xl border border-slate-200">
-            <button type="button" id="week-prev-btn" aria-label="Semana anterior"
-              class="min-h-[44px] min-w-[44px] inline-flex items-center justify-center gap-1 px-2.5 sm:px-3.5 py-2 rounded-lg border border-slate-200 bg-white hover:bg-slate-50 text-xs sm:text-sm font-semibold text-slate-700 transition-colors disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-white">
-              <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"
-                aria-hidden="true">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
-              </svg>
-              <span class="hidden sm:inline">Anterior</span>
-            </button>
-
-            <div class="text-center min-w-0 px-1">
-              <p id="week-range-label" class="font-bold text-sm sm:text-base text-night truncate"></p>
-              <p id="week-count-label" class="text-[11px] sm:text-xs text-slate-500 truncate"></p>
-            </div>
-
-            <button type="button" id="week-next-btn" aria-label="Semana siguiente"
-              class="min-h-[44px] min-w-[44px] inline-flex items-center justify-center gap-1 px-2.5 sm:px-3.5 py-2 rounded-lg border border-slate-200 bg-white hover:bg-slate-50 text-xs sm:text-sm font-semibold text-slate-700 transition-colors disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-white">
-              <span class="hidden sm:inline">Siguiente</span>
-              <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"
-                aria-hidden="true">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
-              </svg>
-            </button>
-          </div>
-
-          <!-- Móvil: Barra compacta de 7 días (L M X J V S D) sin desbordamiento -->
-          <div class="md:hidden bg-white p-2 rounded-xl border border-slate-200">
-            <div id="week-mobile-strip" class="grid grid-cols-7 gap-1"></div>
-            <div id="week-mobile-filter-bar"
-              class="hidden mt-2.5 pt-2.5 border-t border-slate-100 flex items-center justify-between gap-2 px-1 text-xs">
-              <span id="week-selected-day-text" class="font-semibold text-night"></span>
-              <button type="button" id="week-clear-day-btn"
-                class="min-h-[36px] px-2 font-semibold text-cobalt hover:underline">Ver toda la semana</button>
-            </div>
-          </div>
-
-          <div id="week-mobile-list" class="md:hidden space-y-3"></div>
-          <div id="week-desktop-grid" class="hidden md:grid md:grid-cols-7 gap-2.5"></div>
-        </div>
-
-        <!-- ========== C) VISTA MENSUAL ========== -->
+        <!-- ========== B) VISTA MENSUAL ========== -->
         <div id="view-mensual" role="tabpanel" aria-labelledby="tab-mensual" class="cal-panel hidden space-y-4">
           <div class="flex items-center justify-between gap-2 bg-white p-2.5 sm:p-4 rounded-xl border border-slate-200">
             <button type="button" id="month-prev-btn" aria-label="Mes anterior"

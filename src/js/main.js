@@ -1,7 +1,7 @@
 /**
  * Lógica principal de Nómada | Tours en Arequipa:
  * - Catálogo filtrable con estado accesible (aria-pressed)
- * - Programación en 3 vistas (Agenda / Semanal / Mensual) con límites de navegación claros
+ * - Programación en 2 vistas (Agenda / Mensual) con límites de navegación claros
  * - Modal de itinerario con focus trap, restauración de foco y soporte de teclado
  * - Acordeón FAQ accesible (aria-expanded) y menú móvil
  */
@@ -20,8 +20,6 @@
   const MONTHS_SHORT = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
   const DAYS_SHORT = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
   const DAYS_FULL = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
-  const DAYS_MON_INITIAL = ['L', 'M', 'X', 'J', 'V', 'S', 'D'];
-  const DAYS_MON_FULL = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
 
   const LEVEL_BADGE_MAP = {
     principiantes: 'bg-emerald-50 text-emerald-700 border-emerald-200',
@@ -231,14 +229,9 @@
     }
   });
 
-  const MIN_WEEK_START = getMondayOfWeek(parseISO(sortedDepartures[0].date));
-  const MAX_WEEK_START = getMondayOfWeek(parseISO(sortedDepartures[sortedDepartures.length - 1].date));
-
   const calState = {
     view: window.innerWidth < 768 ? 'agenda' : 'mensual',
     agendaMonth: 'all',
-    weekStart: new Date(MIN_WEEK_START.getTime()),
-    selectedWeekDay: null,
     monthCursor: 0,
     selectedMonthDay: sortedDepartures[0].date
   };
@@ -246,7 +239,6 @@
   const viewButtons = document.querySelectorAll('.cal-view-btn');
   const viewPanels = {
     agenda: document.getElementById('view-agenda'),
-    semanal: document.getElementById('view-semanal'),
     mensual: document.getElementById('view-mensual')
   };
 
@@ -313,7 +305,6 @@
     });
 
     if (viewName === 'agenda') renderAgendaView();
-    if (viewName === 'semanal') renderWeeklyView();
     if (viewName === 'mensual') renderMonthlyView();
   }
 
@@ -381,153 +372,7 @@
     });
   });
 
-  // --- B) VISTA SEMANAL ---
-  const weekRangeLabel = document.getElementById('week-range-label');
-  const weekCountLabel = document.getElementById('week-count-label');
-  const weekMobileStrip = document.getElementById('week-mobile-strip');
-  const weekMobileFilterBar = document.getElementById('week-mobile-filter-bar');
-  const weekSelectedDayText = document.getElementById('week-selected-day-text');
-  const weekClearDayBtn = document.getElementById('week-clear-day-btn');
-  const weekMobileList = document.getElementById('week-mobile-list');
-  const weekDesktopGrid = document.getElementById('week-desktop-grid');
-  const weekPrevBtn = document.getElementById('week-prev-btn');
-  const weekNextBtn = document.getElementById('week-next-btn');
-
-  function renderWeeklyView() {
-    const start = calState.weekStart;
-    const days = Array.from({ length: 7 }, (_, i) => addDays(start, i));
-    const end = days[6];
-
-    const isAtMinWeek = formatISO(start) <= formatISO(MIN_WEEK_START);
-    const isAtMaxWeek = formatISO(start) >= formatISO(MAX_WEEK_START);
-    weekPrevBtn.disabled = isAtMinWeek;
-    weekNextBtn.disabled = isAtMaxWeek;
-
-    const sameMonth = start.getMonth() === end.getMonth();
-    weekRangeLabel.textContent = sameMonth
-      ? `${start.getDate()} – ${end.getDate()} ${MONTHS_SHORT[start.getMonth()]} ${start.getFullYear()}`
-      : `${start.getDate()} ${MONTHS_SHORT[start.getMonth()]} – ${end.getDate()} ${MONTHS_SHORT[end.getMonth()]} ${end.getFullYear()}`;
-
-    const weekIsoSet = new Set(days.map(formatISO));
-    const weekDepartures = sortedDepartures.filter(dep => weekIsoSet.has(dep.date));
-    weekCountLabel.textContent = `${weekDepartures.length} ${weekDepartures.length === 1 ? 'salida programada' : 'salidas programadas'} esta semana`;
-
-    if (calState.selectedWeekDay && !weekIsoSet.has(calState.selectedWeekDay)) {
-      calState.selectedWeekDay = null;
-    }
-
-    weekMobileStrip.innerHTML = days.map((d, idx) => {
-      const iso = formatISO(d);
-      const dayDeps = weekDepartures.filter(dep => dep.date === iso);
-      const isSelected = calState.selectedWeekDay === iso;
-      const hasDeps = dayDeps.length > 0;
-      const dayLabel = `${DAYS_FULL[d.getDay()]} ${d.getDate()} de ${MONTHS_ES[d.getMonth()]}: ${
-        hasDeps ? `${dayDeps.length} ${dayDeps.length === 1 ? 'salida' : 'salidas'}` : 'sin salidas'
-      }`;
-
-      const dotsHTML = dayDeps.slice(0, 3).map(dep =>
-        `<span class="w-1.5 h-1.5 rounded-full ${isSelected ? 'bg-white' : getLevelDotClass(dep.level)}"></span>`
-      ).join('');
-
-      return `
-        <button type="button" data-week-day="${iso}"
-          aria-label="${dayLabel}"
-          aria-pressed="${isSelected ? 'true' : 'false'}"
-          class="min-h-[52px] flex flex-col items-center justify-center py-1.5 px-0.5 rounded-lg border transition-colors ${
-            isSelected
-              ? 'bg-cobalt text-white border-cobalt'
-              : hasDeps
-                ? 'bg-[#F8FAFC] text-night border-slate-200 hover:border-cobalt'
-                : 'bg-white text-slate-400 border-transparent'
-          }">
-          <span class="text-[10px] font-bold uppercase">${DAYS_MON_INITIAL[idx]}</span>
-          <span class="text-sm font-extrabold mt-0.5">${d.getDate()}</span>
-          <span class="flex items-center justify-center gap-0.5 h-2 mt-1">${dotsHTML}</span>
-        </button>
-      `;
-    }).join('');
-
-    if (calState.selectedWeekDay) {
-      const sd = parseISO(calState.selectedWeekDay);
-      weekSelectedDayText.textContent = `Mostrando: ${DAYS_SHORT[sd.getDay()]} ${sd.getDate()} ${MONTHS_SHORT[sd.getMonth()]}`;
-      weekMobileFilterBar.classList.remove('hidden');
-    } else {
-      weekMobileFilterBar.classList.add('hidden');
-    }
-
-    const mobileListItems = calState.selectedWeekDay
-      ? weekDepartures.filter(dep => dep.date === calState.selectedWeekDay)
-      : weekDepartures;
-
-    if (mobileListItems.length) {
-      weekMobileList.innerHTML = mobileListItems.map(createDepartureCardHTML).join('');
-    } else {
-      weekMobileList.innerHTML = `
-        <div class="bg-white rounded-xl border border-slate-200 p-6 text-center">
-          <p class="text-sm font-semibold text-night">Sin salidas programadas para este ${calState.selectedWeekDay ? 'día' : 'rango'}.</p>
-          <p class="text-xs text-slate-500 mt-1">Usa las flechas para revisar la siguiente semana o consúltanos por una salida privada.</p>
-        </div>
-      `;
-    }
-
-    weekDesktopGrid.innerHTML = days.map((d, idx) => {
-      const iso = formatISO(d);
-      const dayDeps = weekDepartures.filter(dep => dep.date === iso);
-      const isWeekend = idx >= 5;
-
-      const cardsHTML = dayDeps.length
-        ? dayDeps.map(dep => `
-            <div class="p-2.5 rounded-lg border border-slate-200 bg-[#F8FAFC] space-y-1.5">
-              <div class="flex items-center gap-1.5">
-                <span class="w-2 h-2 rounded-full shrink-0 ${getLevelDotClass(dep.level)}"></span>
-                <span class="text-[11px] font-bold text-night truncate">${dep.route}</span>
-              </div>
-              <p class="text-[11px] text-slate-500">${dep.modality} · ${dep.price}</p>
-              <span class="inline-block px-1.5 py-0.5 rounded text-[10px] font-bold border ${getStatusBadgeClass(dep.statusType)}">${dep.status}</span>
-              <div class="grid grid-cols-2 gap-1 pt-1">
-                <button type="button" data-open-tour="${dep.tourId}" class="min-h-[34px] py-1 px-1.5 rounded bg-white border border-slate-200 text-[10px] font-semibold text-night hover:bg-slate-100">Info</button>
-                <a href="${buildWhatsAppUrl(dep)}" target="_blank" rel="noopener noreferrer" class="min-h-[34px] py-1 px-1.5 rounded bg-summit hover:bg-summit-hover text-white text-[10px] font-semibold inline-flex items-center justify-center">Reservar</a>
-              </div>
-            </div>
-          `).join('')
-        : '<p class="text-[11px] text-slate-400 text-center py-6">Sin salidas</p>';
-
-      return `
-        <div class="bg-white rounded-xl border border-slate-200 overflow-hidden flex flex-col min-h-[210px]">
-          <div class="px-2.5 py-2 border-b border-slate-200 text-center ${isWeekend ? 'bg-cobalt-light' : 'bg-slate-50'}">
-            <span class="block text-[10px] font-bold uppercase ${isWeekend ? 'text-cobalt' : 'text-slate-500'}">${DAYS_MON_FULL[idx]}</span>
-            <span class="block font-extrabold text-base text-night">${d.getDate()} ${MONTHS_SHORT[d.getMonth()]}</span>
-          </div>
-          <div class="p-2 space-y-2 flex-1">
-            ${cardsHTML}
-          </div>
-        </div>
-      `;
-    }).join('');
-  }
-
-  weekClearDayBtn.addEventListener('click', () => {
-    calState.selectedWeekDay = null;
-    renderWeeklyView();
-  });
-
-  weekPrevBtn.addEventListener('click', () => {
-    const prev = addDays(calState.weekStart, -7);
-    if (formatISO(prev) < formatISO(MIN_WEEK_START)) return;
-    calState.weekStart = prev;
-    calState.selectedWeekDay = null;
-    renderWeeklyView();
-  });
-
-  weekNextBtn.addEventListener('click', () => {
-    const next = addDays(calState.weekStart, 7);
-    if (formatISO(next) > formatISO(MAX_WEEK_START)) return;
-    calState.weekStart = next;
-    calState.selectedWeekDay = null;
-    renderWeeklyView();
-  });
-
-  // --- C) VISTA MENSUAL ---
+  // --- B) VISTA MENSUAL ---
   const monthTitleLabel = document.getElementById('month-title-label');
   const monthGridEl = document.getElementById('month-grid');
   const monthDayDetailEl = document.getElementById('month-day-detail');
@@ -797,19 +642,11 @@
     }
   });
 
-  // Delegación de eventos para botones dinámicos (itinerarios, días semanal/mensual)
+  // Delegación de eventos para botones dinámicos (itinerarios, días vista mensual)
   document.addEventListener('click', (e) => {
     const tourBtn = e.target.closest('[data-open-tour]');
     if (tourBtn) {
       openTourModal(tourBtn.dataset.openTour);
-      return;
-    }
-
-    const weekDayBtn = e.target.closest('[data-week-day]');
-    if (weekDayBtn) {
-      const iso = weekDayBtn.dataset.weekDay;
-      calState.selectedWeekDay = calState.selectedWeekDay === iso ? null : iso;
-      renderWeeklyView();
       return;
     }
 

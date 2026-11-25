@@ -1,4 +1,4 @@
-const CACHE_NAME = 'nomada-aqp-v1';
+const CACHE_NAME = 'nomada-aqp-v2';
 
 const APP_SHELL_ASSETS = [
   './',
