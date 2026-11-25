@@ -1,0 +1,13 @@
+{
+  "name": "nomada-tours-arequipa",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Sitio web de Nómada | Tours en Arequipa",
+  "scripts": {
+    "build:css": "npx tailwindcss -i ./src/styles/input.css -o ./assets/css/styles.css --minify",
+    "dev:css": "npx tailwindcss -i ./src/styles/input.css -o ./assets/css/styles.css --watch"
+  },
+  "devDependencies": {
+    "tailwindcss": "^3.4.15"
+  }
+}
